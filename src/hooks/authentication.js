@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react"
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile } from "firebase/auth";
-import { firebaseAuth } from "../firebase/config"
+import { firebaseAuth, firebaseStorage, firestoreDatabase } from "../firebase/config"
 import { useAuthContext } from "./useAuthContext";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { collection, doc, setDoc } from "firebase/firestore";
 
 export const useSignup = () => {
   const [isCancelled, setIsCancelled] = useState(false);
@@ -9,7 +11,7 @@ export const useSignup = () => {
   const [isPending, setIsPending] = useState(null);
   const { dispatch } = useAuthContext();
 
-  const signup = async (email, password, displayName) => {
+  const signup = async (email, password, displayName, thumbnail) => {
     setError(null);
     setIsPending(true);
 
@@ -21,8 +23,21 @@ export const useSignup = () => {
         throw new Error('Could not complete signup');
       }
 
-      // update user profile
-      await updateProfile(res.user, { displayName });
+      // upload user thumbnail
+      const uploadPath = `thumbnails/${res.user.uid}/${thumbnail.name}`;
+      const img = ref(firebaseStorage, uploadPath);
+      await uploadBytes(img, thumbnail);
+      const imgUrl = await getDownloadURL(ref(img));
+
+      // add display name to user
+      await updateProfile(res.user, { displayName, photoURL: imgUrl });
+
+      // create a user document
+      await setDoc(doc(collection(firestoreDatabase, 'users'), res.user.uid), {
+        online: true,
+        displayName,
+        photoURL: imgUrl
+      });
 
       // dispatch login action
       dispatch({ type: 'LOGIN', payload: res.user });
