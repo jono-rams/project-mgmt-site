@@ -42,6 +42,7 @@ export const useSignup = () => {
   };
 
   useEffect(() => {
+    setIsCancelled(false);
     return () => setIsCancelled(true);
   }, [])
 
@@ -80,6 +81,7 @@ export const useLogout = () => {
   }
 
   useEffect(() => {
+    setIsCancelled(false);
     return () => setIsCancelled(true);
   }, [])
 
@@ -122,6 +124,7 @@ export const useLogin = () => {
   }
 
   useEffect(() => {
+    setIsCancelled(false);
     return () => setIsCancelled(true);
   }, [])
 
