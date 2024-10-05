@@ -3,7 +3,7 @@ import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, up
 import { firebaseAuth, firebaseStorage, firestoreDatabase } from "../firebase/config"
 import { useAuthContext } from "./useAuthContext";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { collection, doc, setDoc } from "firebase/firestore";
+import { collection, doc, setDoc, updateDoc } from "firebase/firestore";
 
 export const useSignup = () => {
   const [isCancelled, setIsCancelled] = useState(false);
@@ -68,7 +68,7 @@ export const useLogout = () => {
   const [isCancelled, setIsCancelled] = useState(false);
   const [error, setError] = useState(null);
   const [isPending, setIsPending] = useState(null);
-  const { dispatch } = useAuthContext();
+  const { dispatch, user } = useAuthContext();
 
   const logout = async () => {
     setError(null);
@@ -76,6 +76,10 @@ export const useLogout = () => {
 
     // sign the user out
     try {
+      // update online status
+      const { uid } = user;
+      await updateDoc(doc(collection(firestoreDatabase, 'users'), uid), { online: false });
+
       await signOut(firebaseAuth);
 
       // dispatch logout action
