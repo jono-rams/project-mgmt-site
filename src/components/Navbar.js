@@ -7,7 +7,7 @@ import './Navbar.css'
 import Temple from '../assets/temple.svg'
 
 export default function Navbar() {
-  const { logout } = useLogout();
+  const { logout, isPending } = useLogout();
   const { user } = useAuthContext();
 
   return (
@@ -27,7 +27,7 @@ export default function Navbar() {
 
         {user && (
           <li>
-            <button className="btn" onClick={logout}>Logout</button>
+            <button className="btn" onClick={logout}>{isPending ? 'Logging out..' : 'Logout'}</button>
           </li>
         )}
       </ul>
