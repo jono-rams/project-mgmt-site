@@ -128,6 +128,9 @@ export const useLogin = () => {
       // dispatch login action
       dispatch({ type: 'LOGIN', payload: res.user });
 
+      // update online status
+      await updateDoc(doc(collection(firestoreDatabase, 'users'), res.user.uid), { online: true });
+
       // update state
       if (!isCancelled) {
         setIsPending(false);
