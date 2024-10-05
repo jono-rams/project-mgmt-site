@@ -14,6 +14,7 @@ import Project from './pages/project/Project'
 // components
 import Navbar from "./components/Navbar";
 import Sidebar from './components/Sidebar';
+import AllUsers from './components/AllUsers';
 
 function App() {
   const { authIsReady, user } = useAuthContext();
@@ -33,6 +34,7 @@ function App() {
               <Route path="signup" element={!user ? <Signup /> : <Navigate to="/" replace={true} />} />
             </Routes>
           </div>
+          {user && <AllUsers />}
         </BrowserRouter>
       )}
     </div>
