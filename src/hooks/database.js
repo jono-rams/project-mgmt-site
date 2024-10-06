@@ -113,3 +113,33 @@ export const useCollection = (_collection, _query, _orderBy) => {
 
   return { documents, error }
 }
+
+export const useDocument = (_collection, id) => {
+  const [document, setDocument] = useState(null)
+  const [error, setError] = useState(null)
+
+  // realtime document data
+  useEffect(() => {
+    const ref = doc(firestoreDatabase, _collection, id);
+
+    const unsubscribe = onSnapshot(ref, snapshot => {
+      // need to make sure the doc exists & has data
+      if(snapshot.data()) {
+        setDocument({...snapshot.data(), id: snapshot.id})
+        setError(null)
+      }
+      else {
+        setError('No such document exists')
+      }
+    }, err => {
+      console.log(err.message)
+      setError('failed to get document')
+    })
+
+    // unsubscribe on unmount
+    return () => unsubscribe()
+
+  }, [_collection, id])
+
+  return { document, error }
+}
