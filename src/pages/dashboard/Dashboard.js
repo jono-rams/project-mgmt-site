@@ -5,7 +5,10 @@ import { useCollection } from '../../hooks/database';
 import './Dashboard.css'
 
 export default function Dashboard() {
-  const { documents, error } = useCollection('projects');
+  const { documents, error } = useCollection(
+    'projects',
+    ['status', '!=', 'completed']
+  );
 
   return (
     <div>
