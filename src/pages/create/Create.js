@@ -66,6 +66,7 @@ export default function Create() {
     });
 
     const project = {
+      status: 'pending',
       name,
       details,
       category: category.value,
@@ -130,7 +131,7 @@ export default function Create() {
               isMulti
             />
           </label>
-          <button className='btn'>Add Project</button>
+          <button disabled={response.isPending} className='btn'>{response.isPending ? 'Adding Project' : 'Add Project'}</button>
           {formError && <div className='error'>{formError}</div>}
         </form>)}
     </div>
