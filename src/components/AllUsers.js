@@ -15,7 +15,7 @@ export default function AllUsers() {
           <Avatar src={user.photoURL} />
         </div>
       ))}
-      {error && <div className='error'>{error.message}</div>}
+      {error && <div className='error'>{error}</div>}
     </div>
   )
 }
