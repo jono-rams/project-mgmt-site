@@ -15,6 +15,7 @@ import Project from './pages/project/Project'
 import Navbar from "./components/Navbar";
 import Sidebar from './components/Sidebar';
 import AllUsers from './components/AllUsers';
+import CompletedProjects from './pages/completed/CompletedProjects';
 
 function App() {
   const { authIsReady, user } = useAuthContext();
@@ -29,6 +30,7 @@ function App() {
             <Routes>
               <Route index element={user ? <Dashboard /> : <Navigate to="/login" replace={true} />} />
               <Route path='create' element={user ? <Create /> : <Navigate to="/login" replace={true} />} />
+              <Route path='projects/completed' element={user ? <CompletedProjects /> : <Navigate to="/login" replace={true} />} />
               <Route path='projects/:id' element={user ? <Project /> : <Navigate to="/login" replace={true} />} />
               <Route path="login" element={!user ? <Login /> : <Navigate to="/" replace={true} />} />
               <Route path="signup" element={!user ? <Signup /> : <Navigate to="/" replace={true} />} />

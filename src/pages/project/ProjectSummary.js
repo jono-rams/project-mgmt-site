@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuthContext } from "../../hooks/useAuthContext";
 
 export default function ProjectSummary({ project }) {
-  const { name, dueDate, details, assignedUsersList, createdBy } = project;
+  const { name, dueDate, details, assignedUsersList, createdBy, status } = project;
   const { updateDocument, response } = useFirestore('projects');
   const { user } = useAuthContext();
 
@@ -40,7 +40,17 @@ export default function ProjectSummary({ project }) {
             </div>
           ))}
         </div>
-        {createdBy.id === user.uid && <button disabled={response.isPending} onClick={handleClick} className='btn'>{response.isPending ? 'Marking as Complete...' : 'Mark as Complete'}</button>}
+        {
+          createdBy.id === user.uid &&
+          status !== 'completed' &&
+          <button
+            disabled={response.isPending}
+            onClick={handleClick}
+            className='btn'
+          >
+            {response.isPending ? 'Marking as Complete...' : 'Mark as Complete'}
+          </button>
+        }
       </div>
     </div>
   );
