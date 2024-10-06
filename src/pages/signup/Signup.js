@@ -82,7 +82,7 @@ export default function Signup() {
         />
         {thumbnailError && <div className='error'>{thumbnailError}</div>}
       </label>
-      <button className="btn">{isPending ? 'Loading' : 'Sign up'}</button>
+      <button disabled={isPending} className="btn">{isPending ? 'Loading' : 'Sign up'}</button>
       {error && <div className='error'>{error}</div>}
     </form>
   )

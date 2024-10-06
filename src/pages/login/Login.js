@@ -35,7 +35,7 @@ export default function Login() {
           required
         />
       </label>
-      <button className="btn">{isPending ? 'Loading' : 'Login'}</button>
+      <button disabled={isPending} className="btn">{isPending ? 'Loading' : 'Login'}</button>
       {error && <div className='error'>{error}</div>}
     </form>
   )
