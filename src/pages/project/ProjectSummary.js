@@ -5,14 +5,12 @@ import { useAuthContext } from "../../hooks/useAuthContext";
 
 export default function ProjectSummary({ project }) {
   const { name, dueDate, details, assignedUsersList, createdBy, status } = project;
-  const { updateDocument, response } = useFirestore('projects');
+  const { deleteDocument, updateDocument, response } = useFirestore('projects');
   const { user } = useAuthContext();
 
   const navigate = useNavigate();
 
   const handleClick = async (e) => {
-    e.preventDefault();
-
     await updateDocument(project.id, {
       status: 'completed'
     });
@@ -22,6 +20,15 @@ export default function ProjectSummary({ project }) {
       navigate(0);
     }
   };
+
+  const handleDelete = async (e) => {
+    await deleteDocument(project.id);
+
+    if (!response.error) {
+      navigate('/', { replace: true });
+      navigate(0);
+    }
+  }
 
   return (
     <div>
@@ -49,6 +56,17 @@ export default function ProjectSummary({ project }) {
             className='btn'
           >
             {response.isPending ? 'Marking as Complete...' : 'Mark as Complete'}
+          </button>
+        }
+        {
+          createdBy.id === user.uid &&
+          status !== 'completed' &&
+          <button
+            disabled={response.isPending}
+            onClick={handleDelete}
+            className='btn delete'
+          >
+            {response.isPending ? 'Deleting Project...' : 'Delete Project'}
           </button>
         }
       </div>

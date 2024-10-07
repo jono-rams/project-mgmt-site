@@ -36,6 +36,9 @@
 .project-summary + .btn {
   margin-top: 20px;
 }
+.project-summary .delete {
+  margin-left: 10px;
+}
 
 /* project comments */
 .project-comments label {
